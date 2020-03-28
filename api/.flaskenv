@@ -1,0 +1,2 @@
+FLASK_APP=musictrainer.py
+FLASK_ENV=development
