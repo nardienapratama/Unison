@@ -11,7 +11,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cd react-frontend && react-scripts start",
     "start-api": "cd flask-backend && python -m flask run --no-debugger",
     "build": "react-scripts build",
     "test": "react-scripts test",
