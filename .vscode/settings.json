@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "flask-backend\\project_env\\Scripts\\python.exe"
+    "python.pythonPath": "backend\\project_env\\Scripts\\python.exe"
     //"python.pythonPath": "C:\\Users\\Nardiena A. Pratama\\Anaconda3\\python.exe"
     //"python.pythonPath": "C:\\Users\\Nardiena A. Pratama\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
     //"python.pythonPath": "C:\\Users\\Nardiena A. Pratama\\Documents\\Personal Projects\\project_env\\Scripts\\python.exe"
