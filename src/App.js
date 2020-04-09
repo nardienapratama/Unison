@@ -1,38 +1,25 @@
-import React, {useEffect} from 'react';
-// import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import { PracticeRecords } from './components/PracticeRecords';
 
 function App() {
-  // const [user, setUser] = useState(0);
+
+  const [practiceRecords, setPracticeRecords] = useState([]);
 
   useEffect(() => {
-    fetch('/').then(res => res.json()).then(data => {
+    fetch('/practicerecords').then(response => response.json()).then(data => {
       console.log(data);
+      setPracticeRecords(data.practiceRecords);
     });
   }, []);
+
+
+  console.log(practiceRecords)
   
   return (
     <div className="App">
-      <header className="App-header">
-        {/* <title>{{ title }} - Microblog</title> */}
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        {/* <p>The current time is {currentTime}.</p> */}
-      </header>
-      {/* <body> */}
-        {/* <h1>Hello, { user.username }!</h1> */}
-      {/* </body> */}
+      
+    <PracticeRecords PracticeRecordsArg={practiceRecords}/>
     </div>
   );
 }
