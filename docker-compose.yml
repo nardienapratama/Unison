@@ -1,44 +1,83 @@
-version: '3'
+# version: '3.7'
 
+# services:
+#   unisonBE-dev:
+#     image: nardienapratama:unisonBE 
+#     build: ./backend
+#     ports:
+#       - "5000:5000"
+#     environment:
+#     - ENV=development
+#     - DB= ""
+#     volumes:
+#       - ./backend/.env:/app/.env
+
+#   unisonFE-dev:
+#     image: nardienapratama:unisonFE
+#     ports:
+#       - "3001:80"
+#     build: ./frontend
+#     ports:
+#       - "3001:80"
+#     environment:
+#       - ENV=development
+#     depends_on:
+#       - unisonBE-dev  
+
+#   nginx:
+#     image: nginx:1.17-alpine
+#     restart: always
+#     ports:
+#       - 80:80
+#       - 443:443
+#     volumes:
+#       - ./nginx-conf:/etc/nginx/conf.d
+#       - ./data/certbot/conf:/etc/letsencrypt
+#       - ./data/certbot/www:/var/www/certbot
+#     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+#   certbot:
+#     image: certbot/certbot
+#     volumes:
+#       - ./data/certbot/conf:/etc/letsencrypt
+#       - ./data/certbot/www:/var/www/certbot
+#     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+version: '3.7'
 services:
-  unisonBE-dev:
-    image: nardienapratama:unisonBE 
-    build: ./backend
-    ports:
-      - "5000:5000"
-    environment:
-    - ENV=development
-    - DB= ""
-    volumes:
-      - ./backend/.env:/app/.env
+   client:
+      build:
+         context: ./frontend
+         dockerfile: Dockerfile
+      tty: true
+      ports:
+         - "3000:3000"
+      volumes:
+         - ./frontend:/app
+         - /app/node_modules
 
-  unisonFE-dev:
-    image: nardienapratama:unisonFE
-    ports:
-      - "3001:80"
-    build: ./frontend
-    ports:
-      - "3001:80"
-    environment:
-      - ENV=development
-    depends_on:
-      - unisonBE-dev  
+   mongodb:
+      image: mongo
+      container_name: mongo
+      restart: unless-stopped
+      command: mongod --auth
+      environment: 
+         MONGO_INITDB_ROOT_USERNAME: "admin"
+         MONGO_INITDB_ROOT_PASSWORD: "admin-password"
+         MONGO_INITDB_DATABASE: webapp
+         MONGODB_DATA_DIR: /data/db
+      volumes:
+         - mongodbdata:/data/db
+      networks:
+         - backend
 
-  nginx:
-    image: nginx:1.17-alpine
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx-conf:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+networks:
+   frontend:
+      driver: bridge
+   backend:
+      driver: bridge
+volumes:
+   mongodbdata:
+      driver: local
+   appdata:
+      driver: local
