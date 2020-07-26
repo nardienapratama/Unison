@@ -42,6 +42,7 @@ services:
             MONGODB_PASSWORD: "apipassword"
         volumes:
             - appdata:/var/www/
+            # - ./backend/.env:/app/.env   
         depends_on: 
             - mongodb
         networks:

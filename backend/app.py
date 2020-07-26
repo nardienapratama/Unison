@@ -1,15 +1,12 @@
 import datetime
 import os
-
+ 
 from flask import Flask, Response, request
 from flask_mongoengine import MongoEngine
 
-# a simple Flask app using flask-mongoengine to connect to MongoDB
-
 app = Flask(__name__)
-
 app.config['MONGODB_SETTINGS'] = {
-    'host' : os.environ['MONGODB_HOST'],
+    'host': os.environ['MONGODB_HOST'],
     'username': os.environ['MONGODB_USERNAME'],
     'password': os.environ['MONGODB_PASSWORD'],
     'db': 'webapp'
@@ -30,8 +27,8 @@ def index():
     Todo(title="Simple todo A", text="12345678910").save()
     Todo(title="Simple todo B", text="12345678910").save()
     Todo.objects(title__contains="B").update(set__text="Hello world")
-    todos = Todo.objects().to__json()
+    todos = Todo.objects().to_json()
     return Response(todos, mimetype="application/json", status=200)
 
 if __name__ == "__main__":
-    appVar.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, host='0.0.0.0')
