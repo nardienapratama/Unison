@@ -1,7 +1,7 @@
 import datetime
 import os
  
-from flask import Flask, Response, request
+from flask import Flask, Response, request, render_template
 from flask_mongoengine import MongoEngine
 
 app = Flask(__name__)
@@ -21,6 +21,11 @@ class Todo(db.Document):
     done = db.BooleanField(default=False)
     pub_date = db.DateTimeField(default=datetime.datetime.now)
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def home():
+    return render_template("index.html")
+
 @app.route("/api")
 def index():
     Todo.objects().delete()
@@ -29,6 +34,7 @@ def index():
     Todo.objects(title__contains="B").update(set__text="Hello world")
     todos = Todo.objects().to_json()
     return Response(todos, mimetype="application/json", status=200)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000, host='0.0.0.0')
