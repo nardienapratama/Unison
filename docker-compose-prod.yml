@@ -1,16 +1,17 @@
 version: '3.3'
+
 services:
+
     client:
         build:
             context: ./frontend
-            dockerfile: Dockerfile
-        tty: true
+            dockerfile: Dockerfile-prod
         ports:
-            - "3000:3000"
-        volumes:
+            - "3000:80"
+        volumes: 
             - ./frontend:/app
             - /app/node_modules
-        networks: 
+        networks:
             - frontend
 
     mongodb:
@@ -18,33 +19,32 @@ services:
         container_name: mongo
         restart: unless-stopped
         command: mongod --auth
-        environment: 
+        environment:
             MONGO_INITDB_ROOT_USERNAME: "admin"
             MONGO_INITDB_ROOT_PASSWORD: "admin-password"
             MONGO_INITDB_DATABASE: webapp
             MONGODB_DATA_DIR: /data/db
         volumes:
-            - mongodbdata:/data/db
+        - mongodbdata:/data/db
         networks:
-            - backend
+        - backend
 
     api:
         build: 
             context: ./backend
             dockerfile: Dockerfile
         command: gunicorn --bind 0.0.0.0:5000 app:app
-        ports: 
+        ports:
             - "5000:5000"
-        environment: 
+        environment:
             MONGODB_HOST: mongodb
             MONGODB_USERNAME: "apiuser"
             MONGODB_PASSWORD: "apipassword"
-        volumes: 
-             - appdata:/var/www/
-            # - ./backend/.env:/app/.env        
+        volumes:
+            - appdata:/var/www/
         depends_on: 
             - mongodb
-        networks: 
+        networks:
             - frontend
             - backend
 
