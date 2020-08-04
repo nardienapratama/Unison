@@ -1,6 +1,7 @@
 version: '3.3'
 services:
     client:
+        container_name: client
         build:
             context: ./frontend
             dockerfile: Dockerfile
@@ -29,6 +30,7 @@ services:
             - backend
 
     api:
+        container_name: api
         build: 
             context: ./backend
             dockerfile: Dockerfile
